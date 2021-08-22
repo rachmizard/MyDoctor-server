@@ -27,6 +27,7 @@ const typeDefs = gql`
 		providerId: String
 		username: String
 		signInMethod: String
+		token: String
 	}
 
 	input UserInput {

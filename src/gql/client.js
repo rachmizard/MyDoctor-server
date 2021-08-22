@@ -1,5 +1,4 @@
 import { ApolloServer } from "apollo-server";
-import firebaseClient from "../firebase";
 import { resolvers, typeDefs } from "./registerSchema";
 
 export async function startApolloServer() {
@@ -7,9 +6,9 @@ export async function startApolloServer() {
 		typeDefs,
 		resolvers,
 		context: ({ req }) => {
+			const token = req.get("Authorization") || "";
 			return {
-				headers: req.headers,
-				firebaseClient,
+				token,
 			};
 		},
 	});
