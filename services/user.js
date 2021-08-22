@@ -41,10 +41,17 @@ export const createUser = async (email, fullName, job) => {
 	}
 };
 
+export const updateUser = async (id, payload) => {
+	try {
+		return await firestore().collection("users").doc(id).update(payload);
+	} catch (error) {
+		throw new ApolloError(error);
+	}
+};
+
 export const doSignIn = async (email, password) => {
 	try {
-		const signIn = await auth().signInWithEmailAndPassword(email, password);
-		return signIn;
+		return await auth().signInWithEmailAndPassword(email, password);
 	} catch (error) {
 		throw new ApolloError(error);
 	}
@@ -53,6 +60,14 @@ export const doSignIn = async (email, password) => {
 export const doSignUp = async (email, password) => {
 	try {
 		return await auth().createUserWithEmailAndPassword(email, password);
+	} catch (error) {
+		throw new ApolloError(error);
+	}
+};
+
+export const checkCurrentUser = async () => {
+	try {
+		return auth().currentUser;
 	} catch (error) {
 		throw new ApolloError(error);
 	}

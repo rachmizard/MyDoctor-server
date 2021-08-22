@@ -6,6 +6,8 @@ import {
 	doSignUp,
 	createUser,
 	getUserById,
+	updateUser,
+	checkCurrentUser,
 } from "../../../services/user";
 
 const resolvers = {
@@ -42,13 +44,11 @@ const resolvers = {
 
 				const user = await getUserByEmail(signIn.user.email);
 
-				const response = {
+				return {
 					id: user.docs[0].id,
 					...user.docs[0].data(),
 					...signIn.additionalUserInfo,
 				};
-
-				return response;
 			} catch (error) {
 				throw new ApolloError(error);
 			}
@@ -68,6 +68,35 @@ const resolvers = {
 					...getUserCreated,
 					...signUp.credential,
 				};
+			} catch (error) {
+				throw new ApolloError(error);
+			}
+		},
+		updateUser: async (parent, args) => {
+			try {
+				const currentUser = await checkCurrentUser();
+				if (currentUser !== null) {
+					const { id, payload } = args;
+
+					if (payload.email) {
+						(await checkCurrentUser()).updateEmail(payload.email);
+					}
+
+					if (payload.password) {
+						(await checkCurrentUser()).updatePassword(payload.email);
+					}
+
+					await updateUser(id, payload);
+
+					const getUser = await getUserById(id);
+
+					return {
+						id,
+						...getUser.data(),
+					};
+				}
+
+				throw new ApolloError("Error authentication", 401);
 			} catch (error) {
 				throw new ApolloError(error);
 			}

@@ -14,6 +14,7 @@ const typeDefs = gql`
 			fullName: String!
 			job: String!
 		): UserSignInOrSignUpResponse!
+		updateUser(id: ID!, payload: UserInput!): User!
 	}
 
 	type UserSignInOrSignUpResponse {
@@ -26,6 +27,13 @@ const typeDefs = gql`
 		providerId: String
 		username: String
 		signInMethod: String
+	}
+
+	input UserInput {
+		email: String
+		fullName: String
+		job: String
+		password: String
 	}
 
 	type User {
