@@ -5,6 +5,7 @@ import {
 	getUserByEmail,
 	doSignUp,
 	createUser,
+	getUserById,
 } from "../../../services/user";
 
 const resolvers = {
@@ -12,6 +13,24 @@ const resolvers = {
 		getAllUsers: async () => {
 			const users = await getAllUsers();
 			return users.docs.map((res) => ({ id: res.id, ...res.data() }));
+		},
+		getUserById: async (parent, args) => {
+			try {
+				const { id } = args;
+
+				const findUser = await getUserById(id);
+
+				if (!findUser.exists) {
+					throw new ApolloError("User doesn't exists!");
+				}
+
+				return {
+					id: findUser.id,
+					...findUser.data(),
+				};
+			} catch (error) {
+				throw new ApolloError(error);
+			}
 		},
 	},
 	Mutation: {

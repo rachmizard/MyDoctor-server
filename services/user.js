@@ -21,6 +21,14 @@ export const getUserByEmail = async (email) => {
 	}
 };
 
+export const getUserById = async (id) => {
+	try {
+		return await firestore().collection("users").doc(id).get();
+	} catch (error) {
+		throw new ApolloError(error);
+	}
+};
+
 export const createUser = async (email, fullName, job) => {
 	try {
 		return await firestore().collection("users").add({
