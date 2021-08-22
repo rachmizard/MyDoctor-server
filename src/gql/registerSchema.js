@@ -1,6 +1,6 @@
 import userTypeDefs from "./user/user.typdefs";
 import userResolvers from "./user/user.resolvers";
-import merger from "../../utils";
+import merger from "../utils";
 import { gql } from "apollo-server";
 
 const defaultTypeDefs = gql`

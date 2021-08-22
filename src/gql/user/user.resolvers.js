@@ -8,7 +8,7 @@ import {
 	getUserById,
 	updateUser,
 	checkCurrentUser,
-} from "../../../services/user";
+} from "../../services/user";
 
 const resolvers = {
 	Query: {
