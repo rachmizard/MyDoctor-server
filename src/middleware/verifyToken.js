@@ -6,11 +6,8 @@ dotenv.config();
 
 export default function verifyToken(token) {
 	try {
-		if (token) {
-			return jwt.verify(token, process.env.JWT_TOKEN);
-		}
-		throw new AuthenticationError("You are not authenticated");
+		return jwt.verify(token, process.env.JWT_TOKEN);
 	} catch (error) {
-		return null;
+		throw new AuthenticationError("You are not authenticated");
 	}
 }
