@@ -5,7 +5,10 @@
 	"main": "src/index.js",
 	"scripts": {
 		"start": "nodemon src/index.js --exec babel-node",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"clean": "rm -rf build && mkdir build",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build-babel": "babel -d ./build ./src -s",
+		"build": "npm run clean && npm run build-babel"
 	},
 	"author": "rachmizard",
 	"license": "ISC",
@@ -13,7 +16,10 @@
 		"@babel/cli": "^7.14.8",
 		"@babel/core": "^7.15.0",
 		"@babel/node": "^7.14.9",
+		"@babel/plugin-transform-runtime": "^7.15.0",
+		"@babel/polyfill": "^7.12.1",
 		"@babel/preset-env": "^7.15.0",
+		"@babel/runtime": "^7.15.3",
 		"eslint": "^7.32.0",
 		"nodemon": "^2.0.12"
 	},
