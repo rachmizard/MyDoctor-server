@@ -1,6 +1,9 @@
 import { ApolloError } from "apollo-server";
 import firestore from "../firebase/firestore";
 import auth from "../firebase/auth";
+import firebase from "../firebase";
+
+const PERSISTENCE = firebase.auth.Auth.Persistence.LOCAL;
 
 export const getAllUsers = async (limit = 50) => {
 	try {
@@ -58,11 +61,9 @@ export const doSignIn = async (email, password) => {
 };
 
 export const doSignUp = async (email, password) => {
-	try {
-		return await auth().createUserWithEmailAndPassword(email, password);
-	} catch (error) {
-		throw new ApolloError(error);
-	}
+	await auth().setPersistence(PERSISTENCE);
+
+	return auth().createUserWithEmailAndPassword(email, password);
 };
 
 export const checkCurrentUser = async () => {

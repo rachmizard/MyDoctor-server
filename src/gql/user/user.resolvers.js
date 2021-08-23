@@ -50,9 +50,9 @@ const resolvers = {
 			try {
 				const { email, password } = args;
 
-				const signIn = await doSignIn(email, password);
+				await doSignIn(email, password);
 
-				const user = await getUserByEmail(signIn.user.email);
+				const user = await getUserByEmail(email);
 				// eslint-disable-next-line no-undef
 				const token = jwt.sign(user.docs[0].data(), process.env.JWT_TOKEN, {
 					expiresIn: process.env.JWT_EXPIRED_TIME * 80,
@@ -62,7 +62,6 @@ const resolvers = {
 					id: user.docs[0].id,
 					token,
 					...user.docs[0].data(),
-					...signIn.additionalUserInfo,
 				};
 			} catch (error) {
 				throw new ApolloError(error);

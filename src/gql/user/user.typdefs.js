@@ -22,11 +22,6 @@ const typeDefs = gql`
 		email: String!
 		fullName: String!
 		job: String!
-		isNewUser: Boolean
-		profile: String
-		providerId: String
-		username: String
-		signInMethod: String
 		token: String
 	}
 
