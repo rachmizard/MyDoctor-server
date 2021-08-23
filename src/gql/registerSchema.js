@@ -1,5 +1,7 @@
 import userTypeDefs from "./user/user.typdefs";
 import userResolvers from "./user/user.resolvers";
+import doctorTypeDefs from "./doctor/doctor.typeDefs";
+import doctorResolvers from "./doctor/doctor.resolvers";
 import merger from "../utils";
 import { gql } from "apollo-server";
 
@@ -15,8 +17,8 @@ const defaultResolver = {
 	},
 };
 
-const typeDefs = merger(defaultTypeDefs, userTypeDefs);
+const typeDefs = merger(defaultTypeDefs, userTypeDefs, doctorTypeDefs);
 
-const resolvers = merger(defaultResolver, userResolvers);
+const resolvers = merger(defaultResolver, userResolvers, doctorResolvers);
 
 export { typeDefs, resolvers };
