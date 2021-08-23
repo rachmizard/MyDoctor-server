@@ -18,6 +18,17 @@ export const getDoctorById = async (id) => {
 	}
 };
 
+export const getDoctorByEmail = async (email) => {
+	try {
+		return await firestore()
+			.collection("doctors")
+			.where("email", "==", email)
+			.get();
+	} catch (error) {
+		throw new ApolloError(error);
+	}
+};
+
 export const createDoctor = async (payload) => {
 	try {
 		delete payload.password;
@@ -33,6 +44,14 @@ export const signUp = async (payload) => {
 			payload.email,
 			payload.password
 		);
+	} catch (error) {
+		throw new ApolloError(error.message);
+	}
+};
+
+export const signIn = async (email, password) => {
+	try {
+		return await auth().signInWithEmailAndPassword(email, password);
 	} catch (error) {
 		throw new ApolloError(error.message);
 	}

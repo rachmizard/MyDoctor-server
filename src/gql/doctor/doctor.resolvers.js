@@ -1,7 +1,9 @@
 import {
 	createDoctor,
+	getDoctorByEmail,
 	getDoctorById,
 	getDoctors,
+	signIn,
 	signUp,
 } from "../../services/doctor";
 import { JWT } from "../../utils";
@@ -44,7 +46,19 @@ const resolvers = {
 				token,
 			};
 		},
-		doctorSignIn: async (_, { email, password }) => {},
+		doctorSignIn: async (_, { email, password }) => {
+			const signed = await signIn(email, password);
+			const getDoctor = await getDoctorByEmail(signed.user.email);
+			const result = getDoctor.docs[0];
+
+			const token = JWT.jwtSign(result.data());
+
+			return {
+				id: result.id,
+				token,
+				...result.data(),
+			};
+		},
 	},
 };
 
