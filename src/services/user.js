@@ -1,9 +1,6 @@
 import { ApolloError } from "apollo-server";
-import firestore from "../firebase/firestore";
 import auth from "../firebase/auth";
-import firebase from "../firebase";
-
-const PERSISTENCE = firebase.auth.Auth.Persistence.SESSION;
+import firestore from "../firebase/firestore";
 
 export const getAllUsers = async (limit = 50) => {
 	try {
@@ -54,7 +51,6 @@ export const updateUser = async (id, payload) => {
 
 export const doSignIn = async (email, password) => {
 	try {
-		await auth().setPersistence(PERSISTENCE);
 		return await auth().signInWithEmailAndPassword(email, password);
 	} catch (error) {
 		throw new ApolloError(error);
