@@ -90,8 +90,10 @@ const resolvers = {
 				throw new ApolloError(error);
 			}
 		},
-		userSignOut: async () => {
+		userSignOut: async (_, args, { token }) => {
 			try {
+				verifyToken(token);
+
 				await doSignOut();
 
 				return {
