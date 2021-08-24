@@ -2,6 +2,7 @@
 import { ApolloError } from "apollo-server";
 import { config } from "dotenv";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "../../middleware";
 import {
 	checkCurrentUser,
 	createUser,
@@ -13,9 +14,8 @@ import {
 	getUserById,
 	updateUser,
 } from "../../services/user";
+import { JWT } from "../../utils";
 config();
-
-import { verifyToken } from "../../middleware";
 
 const resolvers = {
 	Query: {
@@ -54,10 +54,12 @@ const resolvers = {
 				await doSignIn(email, password);
 
 				const user = await getUserByEmail(email);
-				// eslint-disable-next-line no-undef
-				const token = jwt.sign(user.docs[0].data(), process.env.JWT_TOKEN, {
-					expiresIn: process.env.JWT_EXPIRED_TIME * 80,
-				});
+
+				if (user.docs.length === 0) {
+					throw new ApolloError("User not found in our records", 500);
+				}
+
+				const token = JWT.jwtSign(user.docs[0].data());
 
 				return {
 					id: user.docs[0].id,
@@ -78,7 +80,7 @@ const resolvers = {
 
 				const getUserCreated = (await createdUser.get()).data();
 
-				const token = jwt.sign(getUserCreated, process.env.JWT_TOKEN);
+				const token = JWT.jwtSign(getUserCreated);
 
 				return {
 					id: createdUser.id,
