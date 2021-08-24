@@ -7,6 +7,12 @@ export async function startApolloServer() {
 	const server = new ApolloServer({
 		typeDefs,
 		resolvers,
+		context: ({ req }) => {
+			const token = req.get("Authorization") || "";
+			return {
+				token,
+			};
+		},
 	});
 	await server.start();
 	server.applyMiddleware({ app });

@@ -53,12 +53,16 @@ export const doSignIn = async (email, password) => {
 	try {
 		return await auth().signInWithEmailAndPassword(email, password);
 	} catch (error) {
-		throw new ApolloError(error);
+		throw new ApolloError(error.message);
 	}
 };
 
 export const doSignUp = async (email, password) => {
 	return auth().createUserWithEmailAndPassword(email, password);
+};
+
+export const doSignOut = async () => {
+	return auth().signOut();
 };
 
 export const checkCurrentUser = async () => {

@@ -6,6 +6,7 @@ import {
 	checkCurrentUser,
 	createUser,
 	doSignIn,
+	doSignOut,
 	doSignUp,
 	getAllUsers,
 	getUserByEmail,
@@ -87,6 +88,17 @@ const resolvers = {
 				};
 			} catch (error) {
 				throw new ApolloError(error);
+			}
+		},
+		userSignOut: async () => {
+			try {
+				await doSignOut();
+
+				return {
+					status: "Successfully logged out!",
+				};
+			} catch (error) {
+				throw new ApolloError(error.message);
 			}
 		},
 		updateUser: async (parent, args, { token }) => {

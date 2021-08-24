@@ -15,6 +15,11 @@ const typeDefs = gql`
 			job: String!
 		): UserSignInOrSignUpResponse!
 		updateUser(id: ID!, payload: UserInput!): User!
+		userSignOut: UserSignOutResponse!
+	}
+
+	type UserSignOutResponse {
+		status: String
 	}
 
 	type UserSignInOrSignUpResponse {
