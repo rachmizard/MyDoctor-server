@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import { ApolloError } from "apollo-server";
 import { config } from "dotenv";
-import jwt from "jsonwebtoken";
 import { verifyToken } from "../../middleware";
 import {
 	checkCurrentUser,
