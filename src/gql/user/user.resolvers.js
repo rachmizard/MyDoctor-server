@@ -12,6 +12,7 @@ import {
 	getUserByEmail,
 	getUserById,
 	getUserPhotoStorage,
+	updatePassword,
 	updateUser,
 	uploadUserPhoto,
 } from "../../services/user";
@@ -123,13 +124,13 @@ const resolvers = {
 						(await checkCurrentUser()).updateEmail(payload.email);
 					}
 
-					if (payload.password) {
-						(await checkCurrentUser()).updatePassword(payload.email);
-					}
-
 					await updateUser(id, payload);
-
 					const getUser = await getUserById(id);
+
+					// NOTE: place updatePassword after process firestore doc updated! as follow :
+					if (payload.password) {
+						await updatePassword(payload.password);
+					}
 
 					return {
 						id,

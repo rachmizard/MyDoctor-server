@@ -88,3 +88,7 @@ export const getUserPhotoStorage = async (fileName) => {
 		throw new ApolloError(error);
 	}
 };
+
+export const updatePassword = (newPassword) => {
+	return auth().currentUser.updatePassword(newPassword);
+};
