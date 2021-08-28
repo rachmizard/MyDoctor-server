@@ -11,7 +11,9 @@ import {
 	getAllUsers,
 	getUserByEmail,
 	getUserById,
+	getUserPhotoStorage,
 	updateUser,
+	uploadUserPhoto,
 } from "../../services/user";
 import { JWT } from "../../utils";
 config();
@@ -71,20 +73,26 @@ const resolvers = {
 		},
 		userSignUp: async (parent, args) => {
 			try {
-				const { email, password, fullName, job } = args;
+				const { payload } = args;
 
-				const signUp = await doSignUp(email, password);
+				await doSignUp(payload.email, payload.password);
 
-				const createdUser = await createUser(email, fullName, job);
+				const createdUser = await createUser(payload);
 
-				const getUserCreated = (await createdUser.get()).data();
+				const getUserCreated = await getUserByEmail(payload.email);
 
-				const token = JWT.jwtSign(getUserCreated);
+				if (getUserCreated.docs.length === 0) {
+					throw new ApolloError("User not found in our records", 500);
+				}
+
+				const token = JWT.jwtSign({
+					id: getUserCreated.docs[0].id,
+					...getUserCreated.docs[0].data(),
+				});
 
 				return {
 					id: createdUser.id,
-					...getUserCreated,
-					...signUp.credential,
+					...getUserCreated.docs[0].data(),
 					token,
 				};
 			} catch (error) {
@@ -133,6 +141,20 @@ const resolvers = {
 			} catch (error) {
 				throw new ApolloError(error);
 			}
+		},
+		uploadUserPhoto: async (_, { file }, { token }) => {
+			const { base64, fileName, type } = await file;
+			const user = verifyToken(token);
+
+			await uploadUserPhoto(base64, fileName, type);
+			const url = await getUserPhotoStorage(fileName);
+
+			await updateUser(user.id, { photoUrl: url });
+
+			return {
+				success: true,
+				url,
+			};
 		},
 	},
 };

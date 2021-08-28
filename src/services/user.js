@@ -1,6 +1,7 @@
 import { ApolloError } from "apollo-server";
 import auth from "../firebase/auth";
 import firestore from "../firebase/firestore";
+import { storage } from "../firebase/storage";
 
 export const getAllUsers = async (limit = 50) => {
 	try {
@@ -29,13 +30,9 @@ export const getUserById = async (id) => {
 	}
 };
 
-export const createUser = async (email, fullName, job) => {
+export const createUser = async (payload) => {
 	try {
-		return await firestore().collection("users").add({
-			email,
-			fullName,
-			job,
-		});
+		return await firestore().collection("users").add(payload);
 	} catch (error) {
 		throw new ApolloError(error);
 	}
@@ -68,6 +65,25 @@ export const doSignOut = async () => {
 export const checkCurrentUser = async () => {
 	try {
 		return auth().currentUser;
+	} catch (error) {
+		throw new ApolloError(error);
+	}
+};
+
+export const uploadUserPhoto = async (file, fileName, contentType) => {
+	try {
+		return await storage()
+			.ref("users")
+			.child(fileName)
+			.putString(file, "base64", { contentType });
+	} catch (error) {
+		throw new ApolloError(error);
+	}
+};
+
+export const getUserPhotoStorage = async (fileName) => {
+	try {
+		return await storage().ref(`users/${fileName}`).getDownloadURL();
 	} catch (error) {
 		throw new ApolloError(error);
 	}

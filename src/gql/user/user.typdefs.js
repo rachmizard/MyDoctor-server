@@ -8,14 +8,25 @@ const typeDefs = gql`
 
 	type Mutation {
 		userSignIn(email: String!, password: String!): UserSignInOrSignUpResponse!
-		userSignUp(
-			email: String!
-			password: String!
-			fullName: String!
-			job: String!
-		): UserSignInOrSignUpResponse!
+		userSignUp(payload: UserInput!): UserSignInOrSignUpResponse!
 		updateUser(id: ID!, payload: UserInput!): User!
 		userSignOut: UserSignOutResponse!
+		uploadUserPhoto(file: FileUploadInput!): FileUploadResponse!
+	}
+
+	type FileUploadResponse {
+		success: Boolean
+		url: String
+	}
+
+	input FileUploadInput {
+		base64: String
+		uri: String
+		width: Int
+		height: Int
+		fileSize: Int
+		type: String
+		fileName: String
 	}
 
 	type UserSignOutResponse {
@@ -27,6 +38,7 @@ const typeDefs = gql`
 		email: String!
 		fullName: String!
 		job: String!
+		photoUrl: String
 		token: String
 	}
 
@@ -35,6 +47,7 @@ const typeDefs = gql`
 		fullName: String
 		job: String
 		password: String
+		photoUrl: String
 	}
 
 	type User {
@@ -42,6 +55,7 @@ const typeDefs = gql`
 		email: String!
 		fullName: String!
 		job: String!
+		photoUrl: String
 	}
 `;
 

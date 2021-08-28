@@ -1,5 +1,6 @@
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
+import { graphqlUploadExpress } from "graphql-upload";
 import { resolvers, typeDefs } from "./registerSchema";
 
 export async function startApolloServer() {
@@ -16,9 +17,9 @@ export async function startApolloServer() {
 	});
 	await server.start();
 	server.applyMiddleware({ app });
-	app.listen({ port: 4000 }, () => {
+	app.listen({ port: 5000 }, () => {
 		console.log(
-			`🚀 Server ready at http://localhost:4000${server.graphqlPath}`
+			`🚀 Server ready at http://localhost:5000${server.graphqlPath}`
 		);
 	});
 }
