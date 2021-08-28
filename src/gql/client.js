@@ -1,6 +1,5 @@
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
-import { graphqlUploadExpress } from "graphql-upload";
 import { resolvers, typeDefs } from "./registerSchema";
 
 export async function startApolloServer() {
