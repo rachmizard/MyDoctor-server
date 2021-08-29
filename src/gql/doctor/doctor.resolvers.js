@@ -1,8 +1,9 @@
+import { ApolloError, UserInputError } from "apollo-server-core";
 import {
 	createDoctor,
 	getDoctorByEmail,
 	getDoctorById,
-	getDoctors,
+	getDoctorsByCategory,
 	signIn,
 	signUp,
 } from "../../services/doctor";
@@ -10,17 +11,18 @@ import { JWT } from "../../utils";
 
 const resolvers = {
 	Query: {
-		getDoctorsByCategory: async (_, { category }) => {
-			const doctors = (await getDoctors(category))
-				.where("category", "==", category)
-				.get();
+		getDoctorsByCategory: async (_, { category, limit }) => {
+			try {
+				if (!category) {
+					throw new UserInputError(
+						"We are unable fulfill your request due to category field was not existed!"
+					);
+				}
 
-			const results = (await doctors).docs;
-
-			return results.map((res) => ({
-				id: res.id,
-				...res.data(),
-			}));
+				return await getDoctorsByCategory(category, limit);
+			} catch (error) {
+				throw new ApolloError(error.message);
+			}
 		},
 		getDoctorById: async (_, { id }) => {
 			const doctor = await getDoctorById(id);

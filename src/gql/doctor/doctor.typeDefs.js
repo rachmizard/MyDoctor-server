@@ -2,7 +2,7 @@ import { gql } from "apollo-server";
 
 const typeDefs = gql`
 	extend type Query {
-		getDoctorsByCategory(category: String, limit: Int): [Doctor]
+		getDoctorsByCategory(category: String!, limit: Int): [Doctor]
 		getDoctorById(id: ID!): Doctor
 	}
 
@@ -37,6 +37,7 @@ const typeDefs = gql`
 		category: String!
 		title: String!
 		gender: String!
+		photoUrl: String
 		totalRatings: Int
 		avgRating: Int
 	}

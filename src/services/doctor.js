@@ -18,6 +18,15 @@ export const getDoctorById = async (id) => {
 	}
 };
 
+export const getDoctorsByCategory = (category, limit = 20) => {
+	return firestore()
+		.collection("doctors")
+		.where("category", "==", category)
+		.limit(limit)
+		.get()
+		.then((res) => res.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+};
+
 export const getDoctorByEmail = async (email) => {
 	try {
 		return await firestore()
