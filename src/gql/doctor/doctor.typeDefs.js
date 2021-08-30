@@ -37,6 +37,9 @@ const typeDefs = gql`
 		category: String!
 		title: String!
 		gender: String!
+		alumnus: String
+		practicePlace: String
+		strNumber: String
 		photoUrl: String
 		totalRatings: Int
 		avgRating: Int

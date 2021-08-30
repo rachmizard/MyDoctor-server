@@ -8,10 +8,13 @@ import {
 	signUp,
 } from "../../services/doctor";
 import { JWT } from "../../utils";
+import { verifyToken } from "../../middleware";
 
 const resolvers = {
 	Query: {
-		getDoctorsByCategory: async (_, { category, limit }) => {
+		getDoctorsByCategory: async (_, { category, limit }, { token }) => {
+			verifyToken(token);
+
 			try {
 				if (!category) {
 					throw new UserInputError(
