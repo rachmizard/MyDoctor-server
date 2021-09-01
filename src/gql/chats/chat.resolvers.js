@@ -90,6 +90,7 @@ const resolvers = {
 				// send existing chat to the target user/doctor.
 				find.docs.forEach(async (res) => {
 					await getChat(res.id).update({
+						...initialize,
 						messages: [...res.data().messages, messagePayload],
 					});
 				});
