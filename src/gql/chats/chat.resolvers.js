@@ -44,12 +44,10 @@ const resolvers = {
 	Mutation: {
 		addMessage: async (_, { doctorId, userId, senderId, message }) => {
 			try {
-				const find = await getChats().then((res) => {
-					return res.query
-						.where("doctor.id", "==", doctorId)
-						.where("user.id", "==", userId)
-						.get();
-				});
+				const find = await getChats()
+					.where("doctor.id", "==", doctorId)
+					.where("user.id", "==", userId)
+					.get();
 
 				const doctor = await getDoctorById(doctorId);
 				const user = await getUserById(userId);
