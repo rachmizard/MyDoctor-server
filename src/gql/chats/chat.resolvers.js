@@ -1,88 +1,44 @@
-import moment from "moment";
 import { getUserById } from "../../services/user";
 import { getDoctorById } from "../../services/doctor";
 import { sendMessage, getChats, getChat } from "../../services/chat";
 import { ApolloError } from "apollo-server-core";
+import { convertDate } from "../../utils";
 
-const chats = [
-	{
-		id: "1",
-		doctor: {
-			id: "xx1",
-			fullName: "Nairobi",
-			photoUrl: "https://google.com",
-		},
-		user: {
-			id: "xxx",
-			fullName: "Mizard",
-		},
-		messages: [],
-	},
-	{
-		id: "2",
-		doctor: {
-			id: "xx2",
-			fullName: "Steven",
-			photoUrl: "https://google.com",
-		},
-		user: {
-			id: "xxx",
-			fullName: "Mizard",
-		},
-		messages: [
-			{
-				sentBy: "xxx",
-				message: "Haloo",
-				time: new Date().getTime(),
-
-				chatDate: new Date().getTime(),
-			},
-			{
-				sentBy: "xx2",
-				message: "Haloo saya dari dokter steven ada yang bisa di bantu?",
-				time: new Date().getTime(),
-
-				chatDate: new Date().getTime(),
-			},
-		],
-	},
-];
-
-function convertUnixTimestamp(ts, toTime = false) {
-	if (toTime) {
-		return moment(ts).format("HH:mm A");
-	}
-
-	return moment(ts).format("dddd, DD MMMM, YYYY");
-}
+const transformedIdOfCollections = (item) => ({
+	id: item.id,
+	...item.data(),
+});
 
 const resolvers = {
 	Query: {
-		chats: (_, { userId, doctorId }) => {
-			const getChats = chats;
+		chats: async (_, { userId, doctorId }) => {
+			try {
+				const chats = await getChats().get();
 
-			if (userId) {
-				return getChats.filter((v) => v.user.id === userId);
+				if (userId) {
+					const query = await chats.query.where("user.id", "==", userId).get();
+					return query.docs.map(transformedIdOfCollections);
+				}
+
+				if (doctorId) {
+					const query = await chats.query
+						.where("doctor.id", "==", userId)
+						.get();
+					return query.docs.map(transformedIdOfCollections);
+				}
+
+				return chats.docs.map(transformedIdOfCollections);
+			} catch (error) {
+				throw new ApolloError(error);
 			}
-
-			if (doctorId) {
-				return getChats.filter((v) => v.doctor.id === doctorId);
-			}
-
-			return getChats;
 		},
 		chat: (_, { chatId }) => {
-			const getChat = chats.find((v) => v.id === chatId);
-			const transformedMessages = getChat.messages.map((msg) => ({
-				...msg,
-				chatDate: convertUnixTimestamp(msg.chatDate),
-				time: convertUnixTimestamp(msg.time, true),
-			}));
-
-			return {
-				...getChat,
-				messages: transformedMessages,
-			};
+			return getChat(chatId)
+				.get()
+				.then(transformedIdOfCollections)
+				.catch((err) => {
+					throw new ApolloError(err);
+				});
 		},
 	},
 	Mutation: {
@@ -119,8 +75,8 @@ const resolvers = {
 				const messagePayload = {
 					sentBy: senderId,
 					message,
-					time: convertUnixTimestamp(new Date().getTime(), true),
-					chatDate: convertUnixTimestamp(new Date().getTime()),
+					time: convertDate.convertUnixTimestamp(new Date().getTime(), true),
+					chatDate: convertDate.convertUnixTimestamp(new Date().getTime()),
 				};
 
 				if (find.docs.length === 0) {

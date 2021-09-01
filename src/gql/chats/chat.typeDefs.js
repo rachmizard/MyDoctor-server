@@ -16,6 +16,7 @@ const typeDefs = gql`
 	}
 
 	type Chat {
+		id: ID
 		doctor: Doctor
 		user: User
 		messages: [Message]
