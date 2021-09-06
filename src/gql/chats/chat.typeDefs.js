@@ -4,6 +4,7 @@ const typeDefs = gql`
 	extend type Query {
 		chats(userId: ID, doctorId: ID): [Chat]
 		chat(chatId: ID!): Chat
+		chatWithSpecificId(userId: ID, doctorId: ID): Chat
 	}
 
 	extend type Mutation {

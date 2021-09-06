@@ -15,15 +15,26 @@ const resolvers = {
 			try {
 				const chats = await getChats().get();
 
+				if (userId && doctorId) {
+					const query = await chats.query
+						.where("user.id", "==", userId)
+						.where("doctor.id", "==", doctorId)
+						.get();
+
+					return query.docs.map(transformedIdOfCollections);
+				}
+
 				if (userId) {
 					const query = await chats.query.where("user.id", "==", userId).get();
+
 					return query.docs.map(transformedIdOfCollections);
 				}
 
 				if (doctorId) {
 					const query = await chats.query
-						.where("doctor.id", "==", userId)
+						.where("doctor.id", "==", doctorId)
 						.get();
+
 					return query.docs.map(transformedIdOfCollections);
 				}
 
@@ -39,6 +50,20 @@ const resolvers = {
 				.catch((err) => {
 					throw new ApolloError(err);
 				});
+		},
+		chatWithSpecificId: async (_, { userId, doctorId }) => {
+			const chats = await getChats().get();
+
+			const query = await chats.query
+				.where("user.id", "==", userId)
+				.where("doctor.id", "==", doctorId)
+				.get();
+
+			if (query.empty) {
+				return {};
+			}
+
+			return transformedIdOfCollections(query.docs[0]);
 		},
 	},
 	Mutation: {
