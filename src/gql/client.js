@@ -1,7 +1,6 @@
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import { resolvers, typeDefs } from "./registerSchema";
-import process from "process";
 
 export async function startApolloServer() {
   const app = express();
