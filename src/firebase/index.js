@@ -1,13 +1,14 @@
 import firebase from "firebase";
+import process from "process";
 
 const firebaseConfig = {
-	apiKey: "AIzaSyAVSf7v_Eg81S_Vd5xfhpXDxtHjl5rU51A",
-	authDomain: "mydoctor-43894.firebaseapp.com",
-	projectId: "mydoctor-43894",
-	storageBucket: "mydoctor-43894.appspot.com",
-	messagingSenderId: "566126828598",
-	appId: "1:566126828598:web:6b42c5f4676560b17ccc97",
-	measurementId: "G-N0QNWKL4Q3",
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT,
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
