@@ -4,7 +4,7 @@
 	"description": "mydoctor-server",
 	"main": "src/index.js",
 	"scripts": {
-		"start": "set NODE_ENV=production&& node ./build",
+		"start": "node ./build",
 		"dev": "set NODE_ENV=development&& nodemon --exec babel-node -r dotenv/config ./src dotenv_config_path=.env.development",
 		"clean": "rm -rf build",
 		"test": "echo \"Error: no test specified\" && exit 1",
@@ -20,7 +20,7 @@
 		"@babel/plugin-transform-runtime": "^7.15.0",
 		"@babel/polyfill": "^7.12.1",
 		"@babel/preset-env": "^7.15.0",
-		"@babel/runtime": "^7.15.3",
+		"@babel/runtime": "^7.15.4",
 		"eslint": "^7.32.0",
 		"nodemon": "^2.0.12"
 	},
