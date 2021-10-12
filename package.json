@@ -9,7 +9,7 @@
 		"clean": "rm -rf build && mkdir build && cp .env ./build",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build-babel": "babel -d ./build ./src -s",
-		"build": "npm run clean && npm run build-babel"
+		"build": "npm run build-babel"
 	},
 	"author": "rachmizard",
 	"license": "ISC",
