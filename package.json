@@ -8,7 +8,7 @@
 		"dev": "set NODE_ENV=development&& nodemon --exec babel-node -r dotenv/config ./src dotenv_config_path=.env.development",
 		"clean": "rm -rf build && mkdir build && cp .env ./build",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build-babel": "babel -d ./build ./src -s",
+		"build-babel": "./node_modules/.bin/babel -d ./build ./src -s",
 		"build": "npm run build-babel"
 	},
 	"author": "rachmizard",
